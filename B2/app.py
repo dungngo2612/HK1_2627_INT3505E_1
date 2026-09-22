@@ -2,8 +2,6 @@
 
 from flask import Flask, jsonify, request, make_response
 import sqlite3
-import hashlib
-import json
 import os
 
 app = Flask(__name__)
@@ -40,11 +38,6 @@ def init_db():
 
 
 init_db()
-
-
-def make_etag(data):
-    payload = json.dumps(data, sort_keys=True, ensure_ascii=False)
-    return hashlib.md5(payload.encode()).hexdigest()
 
 
 @app.errorhandler(404)
@@ -170,14 +163,7 @@ def get_book(bid):
     if not row:
         return jsonify(error="not_found"), 404
 
-    book = dict(row)
-    etag = make_etag(book)
-
-    if request.headers.get("If-None-Match") == etag:
-        return "", 304
-
-    resp = make_response(jsonify(book), 200)
-    resp.headers["ETag"] = etag
+    resp = make_response(jsonify(dict(row)), 200)
     resp.headers["Cache-Control"] = "public, max-age=60"
     return resp
 
