@@ -1,0 +1,100 @@
+{
+  "info": {
+    "name": "Week 5 - Bookstore Pagination",
+    "description": "Examples for offset and cursor pagination, genre filtering, and multi-key sorting.",
+    "schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json"
+  },
+  "variable": [
+    {"key": "base_url", "value": "http://127.0.0.1:5000"},
+    {"key": "next_cursor", "value": ""}
+  ],
+  "item": [
+    {
+      "name": "Offset - technology by price and title",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/v1/books?strategy=offset&offset=0&limit=3&genre=technology&sort=-price_vnd,title"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.response.to.have.status(200);",
+              "const body = pm.response.json();",
+              "pm.expect(body.page.strategy).to.eql('offset');",
+              "pm.expect(body.data.length).to.be.at.most(3);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cursor - first technology page",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/v1/books?strategy=cursor&limit=3&genre=technology&sort=-price_vnd,title"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.response.to.have.status(200);",
+              "const body = pm.response.json();",
+              "pm.expect(body.page.strategy).to.eql('cursor');",
+              "pm.expect(body.page.next_cursor).to.be.a('string');",
+              "pm.collectionVariables.set('next_cursor', body.page.next_cursor);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Cursor - next technology page",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/v1/books?strategy=cursor&limit=3&genre=technology&sort=-price_vnd,title&cursor={{next_cursor}}"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.response.to.have.status(200);",
+              "const body = pm.response.json();",
+              "pm.expect(body.page.strategy).to.eql('cursor');",
+              "pm.expect(body.data.length).to.be.greaterThan(0);"
+            ]
+          }
+        }
+      ]
+    },
+    {
+      "name": "Validation - reject unknown sort field",
+      "request": {
+        "method": "GET",
+        "header": [],
+        "url": "{{base_url}}/api/v1/books?strategy=cursor&sort=title,not_a_column"
+      },
+      "event": [
+        {
+          "listen": "test",
+          "script": {
+            "type": "text/javascript",
+            "exec": [
+              "pm.response.to.have.status(400);",
+              "pm.expect(pm.response.json().error.code).to.eql('invalid-sort');"
+            ]
+          }
+        }
+      ]
+    }
+  ]
+}
