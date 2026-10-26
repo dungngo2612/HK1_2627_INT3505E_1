@@ -1,0 +1,553 @@
+openapi: 3.1.1
+info:
+  title: Social Network - Authentication & Posts API
+  version: 1.0.0
+  description: |
+    Bài tập Buổi 6: hợp đồng cho đúng ba endpoint login, refresh và đọc bài viết.
+    Đây là thiết kế cho ứng dụng chính chủ dùng JWT, không phải OAuth2 Password grant.
+    Chỉ sử dụng HTTPS. Mọi response phải có Cache-Control: no-store và X-Request-Id.
+
+    Scope ứng dụng nằm trong claim scopes (mảng chuỗi). Với HTTP Bearer, spec dùng
+    x-required-scopes để ghi scope bắt buộc; [] trong security chỉ xác định cơ chế
+    xác thực, không có nghĩa là bỏ kiểm tra quyền. Middleware phải thực thi scope
+    và quyền trên từng bài viết; Swagger UI không tự thực thi các chính sách này.
+
+    Login không cần access token/scope. Refresh không cần scope posts:read nhưng
+    phải có refresh JWT hợp lệ. GET /posts/{id} luôn cần access JWT và posts:read,
+    kể cả bài public. Refresh token tuyệt đối không được dùng để đọc bài viết.
+servers:
+  - url: https://api.social.example
+    description: Tên miền minh họa, chưa triển khai server.
+tags:
+  - name: Auth
+    description: Đăng nhập và làm mới phiên.
+  - name: Posts
+    description: Đọc bài viết theo scope và chính sách riêng tư.
+security:
+  - AccessBearer: []
+x-scopes:
+  posts:read: Đọc bài viết mà người dùng được phép xem theo visibility và quan hệ.
+x-token-policy:
+  algorithm-allowlist: [HS256]
+  minimum-signing-key-bits: 256
+  issuer: social-network-auth
+  access-audience: social-network-api
+  refresh-audience: social-network-auth
+  required-claims: [sub, iss, aud, exp, iat, nbf, jti, sid, type, scopes]
+  access-max-ttl-seconds: 900
+  session-absolute-ttl-seconds: 2592000
+  description: |
+    Khóa ký lấy từ secret manager/env, không hard-code hoặc commit.
+    Dùng thư viện JWT để kiểm chữ ký, allowlist alg, issuer, audience, thời gian
+    exp/nbf/iat, kiểu dữ liệu claims và type; không tin payload trước khi verify.
+    sub là UUID user; jti định danh token; sid định danh phiên. scopes là mảng
+    scope được server cấp, không lấy từ JSON login hay dữ liệu client tự khai.
+    Mỗi request protected phải kiểm trạng thái user, sid và thu hồi jti.
+    Khi giảm quyền, logout hoặc đổi mật khẩu, thu hồi các sid liên quan để access
+    token cũ mất hiệu lực ngay; các route quản lý phiên nằm ngoài phạm vi bài.
+    Không chứa password, email, khóa ký hoặc thông tin cá nhân thừa trong JWT.
+    Phiên hết hạn tuyệt đối sau 30 ngày kể từ login, không gia hạn khi refresh.
+    Access TTL = min(900, thời gian còn lại của phiên), tính bằng giây nguyên.
+    Refresh TTL = thời gian còn lại của phiên. Phiên hết hạn phải login lại.
+    Không truy cập được kho phiên/thu hồi thì trả 503, không bỏ qua kiểm tra.
+paths:
+  /auth/login:
+    post:
+      tags: [Auth]
+      operationId: login
+      summary: Đăng nhập bằng email và mật khẩu, nhận cặp JWT.
+      security: []
+      x-required-scopes: []
+      description: |
+        Public: không yêu cầu token hoặc scope có sẵn. Chỉ nhận JSON email/password;
+        từ chối trường lạ, gồm roles/scopes/is_admin. Quyền được nạp từ server.
+        Xác minh mật khẩu bằng Argon2id có salt riêng. Email không tồn tại, sai
+        mật khẩu hoặc tài khoản bị vô hiệu đều trả cùng 401 invalid_credentials,
+        cùng thông điệp; thực hiện dummy password-hash verify nếu không có user.
+        Thành công tạo sid mới và cấp access token (type=access), refresh token
+        (type=refresh). Không đặt token trong URL hoặc cookie của giao diện này.
+        Body tối đa 16 KiB; rate-limit theo IP và định danh tài khoản, tránh lockout
+        vĩnh viễn. Không log password hoặc token.
+      requestBody:
+        required: true
+        content:
+          application/json:
+            schema:
+              $ref: '#/components/schemas/LoginRequest'
+            example:
+              email: an@example.com
+              password: DEMO_ONLY_not_a_real_password
+      responses:
+        '200':
+          $ref: '#/components/responses/TokenIssued'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          description: |
+            invalid_credentials: email/mật khẩu không đúng hoặc tài khoản bị vô hiệu.
+            Không phân biệt nguyên nhân trong body. Đây là lỗi xác minh credential
+            JSON của endpoint login, không phải lỗi access Bearer của resource API.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: invalid_credentials
+                message: Email hoặc mật khẩu không hợp lệ.
+                request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+        '413':
+          description: 'payload_too_large: request body lớn hơn 16 KiB.'
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: payload_too_large
+                message: Nội dung yêu cầu vượt giới hạn cho phép.
+                request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+        '415':
+          description: 'unsupported_media_type: Content-Type không phải application/json.'
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: unsupported_media_type
+                message: Yêu cầu Content-Type application/json.
+                request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /auth/refresh:
+    post:
+      tags: [Auth]
+      operationId: refreshTokens
+      summary: Đổi refresh JWT một lần lấy cặp token mới.
+      security:
+        - RefreshBearer: []
+      x-required-scopes: []
+      description: |
+        Không yêu cầu scope ứng dụng; credential bắt buộc là refresh JWT trong
+        Authorization: Bearer <refresh_token>. Không cần access token còn hạn.
+        Endpoint không nhận request body, query token hoặc cookie. Body không rỗng
+        hay query parameter không được hỗ trợ trả 400 invalid_request.
+
+        Chỉ chấp nhận type=refresh, aud=social-network-auth, user/phiên còn hoạt động
+        và token chưa dùng/chưa thu hồi. Gửi access token, thiếu Bearer, token hết
+        hạn, sai chữ ký/claims, bị thu hồi hoặc user bị vô hiệu đều trả 401.
+        Thiếu credential dùng challenge Bearer không kèm error; credential không
+        hợp lệ dùng challenge error="invalid_token". Không tiết lộ lý do chi tiết.
+
+        Rotation trong một transaction: đánh dấu jti cũ đã dùng, lưu token thay
+        thế và trả cả access/refresh mới. Lưu hash refresh token, sid, jti, thời
+        hạn, grant scopes và quan hệ token family. Giữ thông tin token đã dùng
+        đến hết hạn phiên. Dùng lại token cũ trả 401 và thu hồi toàn bộ sid/family,
+        gồm cả access token liên quan. Client chỉ gửi một refresh tại một thời điểm;
+        retry sau mất response có thể buộc login lại vì chính sách chống replay.
+
+        Scope mới = grant scopes lúc login giao với quyền hiện tại trong DB;
+        không mở rộng quyền từ token cũ hoặc dữ liệu client. Không reset mốc hết
+        hạn tuyệt đối của phiên. Kho phiên/thu hồi lỗi phải trả 503, fail-closed.
+      responses:
+        '200':
+          $ref: '#/components/responses/TokenIssued'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/BearerUnauthorized'
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+  /posts/{id}:
+    get:
+      tags: [Posts]
+      operationId: getPostById
+      summary: Đọc bài viết được phép xem.
+      security:
+        - AccessBearer: []
+      x-required-scopes: ['posts:read']
+      description: |
+        Bắt buộc access JWT type=access, aud=social-network-api và scope posts:read.
+        Không nhận refresh token, token trong query/cookie hoặc request body.
+        Sau giới hạn tốc độ, thứ tự kiểm tra là AuthN -> scope -> định dạng ID
+        -> quyền trên đối tượng -> serialize các trường cho phép.
+        Token thiếu/sai/hết hạn/thu hồi hoặc user bị vô hiệu trả 401.
+        Token hợp lệ nhưng thiếu posts:read trả 403 trước khi tra cứu bài viết.
+
+        Chính sách object: owner được xem bài của mình; người khác được xem bài
+        public nếu không bị chặn, hoặc bài friends nếu có quan hệ bạn bè hai chiều
+        đang hiệu lực và không bị chặn. Bài private chỉ owner được xem. Scope không
+        bỏ qua kiểm tra visibility/quan hệ; role admin không tự tạo ngoại lệ.
+        Không tồn tại, đã xóa hoặc không được xem đều trả cùng 404 post_not_found
+        với body giống nhau để giảm dò ID. ID khó đoán không thay thế kiểm quyền.
+      parameters:
+        - name: id
+          in: path
+          required: true
+          description: UUID của bài viết; định dạng sai trả 400 sau khi kiểm AuthN và scope.
+          schema:
+            type: string
+            format: uuid
+          example: 2fd03863-dff7-4059-aa5a-233fb8da1b78
+      responses:
+        '200':
+          description: Bài viết mà principal hiện tại được phép xem.
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Post'
+              example:
+                id: 2fd03863-dff7-4059-aa5a-233fb8da1b78
+                author_id: 86474335-ea20-4d48-a5d3-b619f085fc6e
+                content: Bài viết minh họa về thiết kế API an toàn.
+                visibility: public
+                created_at: '2026-10-27T02:00:00Z'
+                updated_at: '2026-10-27T02:00:00Z'
+        '400':
+          $ref: '#/components/responses/BadRequest'
+        '401':
+          $ref: '#/components/responses/BearerUnauthorized'
+        '403':
+          description: 'insufficient_scope: access JWT hợp lệ nhưng thiếu posts:read.'
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+            WWW-Authenticate:
+              required: true
+              description: Chỉ rõ scope cần thiết, không tiết lộ dữ liệu bài viết.
+              schema:
+                type: string
+                const: 'Bearer realm="social-network", error="insufficient_scope", scope="posts:read"'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: insufficient_scope
+                message: Thiếu scope posts:read.
+                request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+        '404':
+          description: 'post_not_found: không tồn tại, đã xóa hoặc principal không được xem.'
+          headers:
+            Cache-Control:
+              $ref: '#/components/headers/NoStore'
+            X-Request-Id:
+              $ref: '#/components/headers/RequestId'
+          content:
+            application/json:
+              schema:
+                $ref: '#/components/schemas/Error'
+              example:
+                code: post_not_found
+                message: Không tìm thấy bài viết.
+                request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+        '429':
+          $ref: '#/components/responses/TooManyRequests'
+        '500':
+          $ref: '#/components/responses/InternalServerError'
+        '503':
+          $ref: '#/components/responses/ServiceUnavailable'
+components:
+  securitySchemes:
+    AccessBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Access JWT trong Authorization: Bearer <access_token>; type=access,
+        aud=social-network-api. Kiểm scope bằng x-required-scopes tại operation.
+        Không chấp nhận refresh token hoặc token truyền qua query/cookie.
+    RefreshBearer:
+      type: http
+      scheme: bearer
+      bearerFormat: JWT
+      description: |
+        Refresh JWT trong Authorization: Bearer <refresh_token>; type=refresh,
+        aud=social-network-auth. Chỉ dùng tại POST /auth/refresh và chỉ dùng một lần.
+        Đây là cơ chế JWT riêng của ứng dụng, không phải OAuth2 token endpoint.
+  headers:
+    NoStore:
+      required: true
+      description: Bắt buộc trên mọi response để tránh lưu token hoặc bài viết riêng tư vào cache.
+      schema:
+        type: string
+        const: no-store
+    RequestId:
+      required: true
+      description: UUID do server sinh; trên lỗi phải trùng request_id trong JSON.
+      schema:
+        type: string
+        format: uuid
+    RetryAfter:
+      required: true
+      description: Số giây phải đợi trước khi thử lại.
+      schema:
+        type: integer
+        minimum: 1
+      example: 60
+  schemas:
+    LoginRequest:
+      type: object
+      additionalProperties: false
+      required: [email, password]
+      properties:
+        email:
+          type: string
+          format: email
+          maxLength: 254
+        password:
+          type: string
+          format: password
+          minLength: 1
+          maxLength: 1024
+          writeOnly: true
+          description: Giữ nguyên mật khẩu khi verify, không trim hoặc ghi log.
+    TokenPair:
+      type: object
+      additionalProperties: false
+      required: [access_token, refresh_token, token_type, expires_in, refresh_expires_in, scopes]
+      properties:
+        access_token:
+          type: string
+          minLength: 1
+          maxLength: 8192
+          description: JWT ký có type=access; ví dụ trong spec là chuỗi giả, không sử dụng được.
+        refresh_token:
+          type: string
+          minLength: 1
+          maxLength: 8192
+          description: JWT ký có type=refresh; lưu an toàn, thay thế sau mỗi refresh thành công.
+        token_type:
+          type: string
+          const: Bearer
+        expires_in:
+          type: integer
+          minimum: 1
+          maximum: 900
+          description: TTL access tính bằng giây, không vượt thời gian còn lại của phiên.
+        refresh_expires_in:
+          type: integer
+          minimum: 1
+          maximum: 2592000
+          description: Số giây còn lại đến mốc hết hạn tuyệt đối của phiên; không reset khi refresh.
+        scopes:
+          type: array
+          uniqueItems: true
+          description: Quyền thực tế server cấp, đồng nhất với claim scopes của access token.
+          items:
+            type: string
+            enum: ['posts:read']
+    Post:
+      type: object
+      additionalProperties: false
+      required: [id, author_id, content, visibility, created_at, updated_at]
+      properties:
+        id:
+          type: string
+          format: uuid
+        author_id:
+          type: string
+          format: uuid
+        content:
+          type: string
+          minLength: 1
+          maxLength: 10000
+          description: Nội dung văn bản; client phải escape khi hiển thị, không chèn HTML trực tiếp.
+        visibility:
+          type: string
+          enum: [public, friends, private]
+        created_at:
+          type: string
+          format: date-time
+        updated_at:
+          type: string
+          format: date-time
+    Error:
+      type: object
+      additionalProperties: false
+      required: [code, message, request_id]
+      properties:
+        code:
+          type: string
+          enum:
+            - invalid_request
+            - invalid_credentials
+            - authentication_required
+            - invalid_token
+            - insufficient_scope
+            - post_not_found
+            - payload_too_large
+            - unsupported_media_type
+            - rate_limit_exceeded
+            - internal_error
+            - service_unavailable
+        message:
+          type: string
+          minLength: 1
+          description: Thông điệp an toàn; không chứa token, SQL, stack trace hoặc PII.
+        request_id:
+          type: string
+          format: uuid
+  responses:
+    TokenIssued:
+      description: |
+        Cấp access JWT và refresh JWT mới. Login tạo phiên; refresh giữ nguyên sid
+        và thời điểm hết hạn phiên, vô hiệu refresh cũ. Ví dụ bên dưới chỉ là dữ
+        liệu giả của một lần login, không phải token/credential thật.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        Pragma:
+          required: true
+          description: Ngăn cache token trên client/proxy cũ.
+          schema:
+            type: string
+            const: no-cache
+        X-Request-Id:
+          $ref: '#/components/headers/RequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/TokenPair'
+          example:
+            access_token: DEMO_ACCESS_TOKEN_NOT_VALID
+            refresh_token: DEMO_REFRESH_TOKEN_NOT_VALID
+            token_type: Bearer
+            expires_in: 900
+            refresh_expires_in: 2592000
+            scopes: ['posts:read']
+    BadRequest:
+      description: |
+        invalid_request: thiếu/sai trường, JSON hỏng, trường lạ, path ID không đúng
+        UUID (GET), body không rỗng tại endpoint không nhận body hoặc query parameter
+        không được hỗ trợ. Không trả lại giá trị credential trong thông báo lỗi.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        X-Request-Id:
+          $ref: '#/components/headers/RequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: invalid_request
+            message: Dữ liệu yêu cầu không hợp lệ.
+            request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+    BearerUnauthorized:
+      description: |
+        authentication_required: thiếu Authorization Bearer.
+        invalid_token: Bearer sai định dạng, sai loại access/refresh, chữ ký/claims
+        không hợp lệ, hết hạn, bị thu hồi, refresh đã dùng lại hoặc user/phiên bị vô
+        hiệu. Chỉ dùng thông điệp chung, chi tiết nguyên nhân chỉ ghi vào audit log
+        đã lọc secret. Challenge không kèm error khi thiếu credential; các trường
+        hợp credential không hợp lệ dùng error="invalid_token".
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        X-Request-Id:
+          $ref: '#/components/headers/RequestId'
+        WWW-Authenticate:
+          required: true
+          description: Bắt buộc trên response 401 của endpoint Bearer.
+          schema:
+            type: string
+            enum:
+              - 'Bearer realm="social-network"'
+              - 'Bearer realm="social-network", error="invalid_token"'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          examples:
+            missingToken:
+              summary: Thiếu credential; challenge không kèm error.
+              value:
+                code: authentication_required
+                message: Yêu cầu xác thực.
+                request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+            invalidToken:
+              summary: Mọi nguyên nhân token bị từ chối dùng cùng thông điệp.
+              value:
+                code: invalid_token
+                message: Token không hợp lệ hoặc phiên không còn hiệu lực.
+                request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+    TooManyRequests:
+      description: 'rate_limit_exceeded: vượt giới hạn tốc độ; client phải đợi theo Retry-After.'
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        X-Request-Id:
+          $ref: '#/components/headers/RequestId'
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: rate_limit_exceeded
+            message: Quá nhiều yêu cầu. Vui lòng thử lại sau.
+            request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+    InternalServerError:
+      description: 'internal_error: lỗi không dự kiến; không trả stack trace, SQL hoặc secret.'
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        X-Request-Id:
+          $ref: '#/components/headers/RequestId'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: internal_error
+            message: Có lỗi hệ thống. Vui lòng thử lại sau.
+            request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
+    ServiceUnavailable:
+      description: |
+        service_unavailable: DB, kho phiên/thu hồi hoặc dịch vụ xác thực tạm thời
+        không dùng được. Từ chối truy cập, không bỏ qua kiểm tra auth/permission.
+      headers:
+        Cache-Control:
+          $ref: '#/components/headers/NoStore'
+        X-Request-Id:
+          $ref: '#/components/headers/RequestId'
+        Retry-After:
+          $ref: '#/components/headers/RetryAfter'
+      content:
+        application/json:
+          schema:
+            $ref: '#/components/schemas/Error'
+          example:
+            code: service_unavailable
+            message: Dịch vụ tạm thời không khả dụng.
+            request_id: 913cf564-7857-4dcb-a4cc-b12332fd312a
