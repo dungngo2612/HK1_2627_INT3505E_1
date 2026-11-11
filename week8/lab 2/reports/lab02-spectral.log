@@ -1,0 +1,16 @@
+$ spectral --version
+6.17.1
+
+Before fixes
+$ spectral lint openapi.yaml --ruleset .spectral.yml
+
+openapi.yaml
+  24:9   error  operation-operationId    Operation must have "operationId".                 paths./books.get
+  95:19  error  response-204-no-content  HTTP 204 responses must omit content.              paths./books/{id}.delete.responses[204].content
+ 110:22  error  book-year-integer        Book.year must be an integer in the API contract.  components.schemas.Book.properties.year.type
+
+✖ 3 problems (3 errors, 0 warnings, 0 infos, 0 hints)
+
+After fixes
+$ spectral lint openapi.yaml --ruleset .spectral.yml
+No results with a severity of 'error' found!

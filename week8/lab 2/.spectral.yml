@@ -1,0 +1,67 @@
+extends: spectral:oas
+
+aliases:
+  HttpOperation:
+    - $.paths[*][get,put,post,delete,options,head,patch,trace]
+
+rules:
+  # Keep the OAS checks focused on the lab contract.
+  info-contact: off
+  operation-description: off
+  operation-tags: off
+  operation-operationId: error
+
+  response-204-no-content:
+    description: HTTP 204 responses must omit content.
+    severity: error
+    given: "#HttpOperation.responses['204']"
+    then:
+      field: content
+      function: undefined
+
+  book-year-integer:
+    description: Book.year must be an integer in the API contract.
+    severity: error
+    given: $.components.schemas.Book.properties.year
+    then:
+      field: type
+      function: enumeration
+      functionOptions:
+        values: [integer]
+
+  response-200-has-schema-fields:
+    description: HTTP 200 responses must describe at least one field in the body schema or its array items.
+    message: "{{description}} {{error}}"
+    severity: error
+    given: "#HttpOperation.responses['200']"
+    then:
+      function: schema
+      functionOptions:
+        schema:
+          type: object
+          required: [content]
+          properties:
+            content:
+              type: object
+              minProperties: 1
+              additionalProperties:
+                type: object
+                required: [schema]
+                properties:
+                  schema:
+                    $ref: '#/definitions/bodySchema'
+          definitions:
+            bodySchema:
+              type: object
+              anyOf:
+                - required: [properties]
+                  properties:
+                    properties:
+                      type: object
+                      minProperties: 1
+                - required: [type, items]
+                  properties:
+                    type:
+                      const: array
+                    items:
+                      $ref: '#/definitions/bodySchema'
