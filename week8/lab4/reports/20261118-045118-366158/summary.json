@@ -1,0 +1,304 @@
+[
+  {
+    "scenario": "A",
+    "users": 10,
+    "spawn_rate": 2,
+    "seconds": 30,
+    "name": "Aggregated",
+    "requests": 145,
+    "failures": 0,
+    "failure_rate_percent": 0.0,
+    "rps": 4.931,
+    "p50_ms": 5.0,
+    "p95_ms": 17.0,
+    "p99_ms": 50.0,
+    "locust_exit_code": 0,
+    "latency_slo_pass": true,
+    "gate_pass": true,
+    "endpoints": [
+      {
+        "name": "GET /books",
+        "requests": 58,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 1.973,
+        "p50_ms": 5.0,
+        "p95_ms": 26.0,
+        "p99_ms": 76.0
+      },
+      {
+        "name": "GET /books/{id}",
+        "requests": 48,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 1.632,
+        "p50_ms": 4.0,
+        "p95_ms": 18.0,
+        "p99_ms": 30.0
+      },
+      {
+        "name": "GET /books?year={year}",
+        "requests": 15,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 0.51,
+        "p50_ms": 5.0,
+        "p95_ms": 15.0,
+        "p99_ms": 15.0
+      },
+      {
+        "name": "POST /books",
+        "requests": 24,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 0.816,
+        "p50_ms": 8.0,
+        "p95_ms": 15.0,
+        "p99_ms": 30.0
+      }
+    ],
+    "failures_by_message": []
+  },
+  {
+    "scenario": "B",
+    "users": 50,
+    "spawn_rate": 5,
+    "seconds": 60,
+    "name": "Aggregated",
+    "requests": 1394,
+    "failures": 3,
+    "failure_rate_percent": 0.2152,
+    "rps": 23.477,
+    "p50_ms": 5.0,
+    "p95_ms": 18.0,
+    "p99_ms": 53.0,
+    "locust_exit_code": 1,
+    "latency_slo_pass": true,
+    "gate_pass": true,
+    "endpoints": [
+      {
+        "name": "GET /books",
+        "requests": 577,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 9.718,
+        "p50_ms": 5.0,
+        "p95_ms": 17.0,
+        "p99_ms": 38.0
+      },
+      {
+        "name": "GET /books/{id}",
+        "requests": 409,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 6.888,
+        "p50_ms": 4.0,
+        "p95_ms": 18.0,
+        "p99_ms": 50.0
+      },
+      {
+        "name": "GET /books?year={year}",
+        "requests": 203,
+        "failures": 3,
+        "failure_rate_percent": 1.4778,
+        "rps": 3.419,
+        "p50_ms": 5.0,
+        "p95_ms": 28.0,
+        "p99_ms": 43.0
+      },
+      {
+        "name": "POST /books",
+        "requests": 205,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 3.453,
+        "p50_ms": 8.0,
+        "p95_ms": 17.0,
+        "p99_ms": 85.0
+      }
+    ],
+    "failures_by_message": [
+      {
+        "Method": "GET",
+        "Name": "GET /books?year={year}",
+        "Error": "CatchResponseError('HTTP 500: INJECTED_FAILURE')",
+        "Occurrences": 3
+      }
+    ]
+  },
+  {
+    "scenario": "C",
+    "users": 200,
+    "spawn_rate": 50,
+    "seconds": 30,
+    "name": "Aggregated",
+    "requests": 2866,
+    "failures": 6,
+    "failure_rate_percent": 0.2094,
+    "rps": 96.798,
+    "p50_ms": 6.0,
+    "p95_ms": 70.0,
+    "p99_ms": 110.0,
+    "locust_exit_code": 1,
+    "latency_slo_pass": true,
+    "gate_pass": true,
+    "endpoints": [
+      {
+        "name": "GET /books",
+        "requests": 1241,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 41.914,
+        "p50_ms": 5.0,
+        "p95_ms": 66.0,
+        "p99_ms": 100.0
+      },
+      {
+        "name": "GET /books/{id}",
+        "requests": 814,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 27.493,
+        "p50_ms": 5.0,
+        "p95_ms": 70.0,
+        "p99_ms": 110.0
+      },
+      {
+        "name": "GET /books?year={year}",
+        "requests": 403,
+        "failures": 6,
+        "failure_rate_percent": 1.4888,
+        "rps": 13.611,
+        "p50_ms": 6.0,
+        "p95_ms": 78.0,
+        "p99_ms": 120.0
+      },
+      {
+        "name": "POST /books",
+        "requests": 408,
+        "failures": 0,
+        "failure_rate_percent": 0.0,
+        "rps": 13.78,
+        "p50_ms": 8.0,
+        "p95_ms": 74.0,
+        "p99_ms": 110.0
+      }
+    ],
+    "failures_by_message": [
+      {
+        "Method": "GET",
+        "Name": "GET /books?year={year}",
+        "Error": "CatchResponseError('HTTP 500: INJECTED_FAILURE')",
+        "Occurrences": 6
+      }
+    ]
+  },
+  {
+    "scenario": "pool5",
+    "users": 200,
+    "spawn_rate": 50,
+    "seconds": 20,
+    "name": "Aggregated",
+    "requests": 1130,
+    "failures": 143,
+    "failure_rate_percent": 12.6549,
+    "rps": 53.033,
+    "p50_ms": 1700.0,
+    "p95_ms": 2000.0,
+    "p99_ms": 2000.0,
+    "locust_exit_code": 1,
+    "latency_slo_pass": false,
+    "gate_pass": false,
+    "endpoints": [
+      {
+        "name": "GET /books?year={year}",
+        "requests": 1130,
+        "failures": 143,
+        "failure_rate_percent": 12.6549,
+        "rps": 53.033,
+        "p50_ms": 1700.0,
+        "p95_ms": 2000.0,
+        "p99_ms": 2000.0
+      }
+    ],
+    "failures_by_message": [
+      {
+        "Method": "GET",
+        "Name": "GET /books?year={year}",
+        "Error": "CatchResponseError('HTTP 503: POOL_TIMEOUT')",
+        "Occurrences": 142
+      },
+      {
+        "Method": "GET",
+        "Name": "GET /books?year={year}",
+        "Error": "CatchResponseError('HTTP 0: invalid_json')",
+        "Occurrences": 1
+      }
+    ],
+    "pool_metrics": {
+      "active_connections": 0,
+      "checkouts": 997,
+      "hold_ms": 100.0,
+      "injected_500": 0,
+      "max_active_connections": 5,
+      "max_pool_wait_ms": 1054.5110639941413,
+      "mean_pool_wait_ms": 779.9509191116322,
+      "pid": 19144,
+      "pool_acquire_attempts": 1139,
+      "pool_size": 5,
+      "pool_timeouts": 142,
+      "pool_wait_total_ms": 888364.096868149
+    }
+  },
+  {
+    "scenario": "pool20",
+    "users": 200,
+    "spawn_rate": 50,
+    "seconds": 20,
+    "name": "Aggregated",
+    "requests": 1804,
+    "failures": 2,
+    "failure_rate_percent": 0.1109,
+    "rps": 90.993,
+    "p50_ms": 110.0,
+    "p95_ms": 300.0,
+    "p99_ms": 390.0,
+    "locust_exit_code": 1,
+    "latency_slo_pass": false,
+    "gate_pass": false,
+    "endpoints": [
+      {
+        "name": "GET /books?year={year}",
+        "requests": 1804,
+        "failures": 2,
+        "failure_rate_percent": 0.1109,
+        "rps": 90.993,
+        "p50_ms": 110.0,
+        "p95_ms": 300.0,
+        "p99_ms": 390.0
+      }
+    ],
+    "failures_by_message": [
+      {
+        "Method": "GET",
+        "Name": "GET /books?year={year}",
+        "Error": "CatchResponseError('HTTP 0: invalid_json')",
+        "Occurrences": 2
+      }
+    ],
+    "pool_metrics": {
+      "active_connections": 0,
+      "checkouts": 1814,
+      "hold_ms": 100.0,
+      "injected_500": 0,
+      "max_active_connections": 20,
+      "max_pool_wait_ms": 285.62859399971785,
+      "mean_pool_wait_ms": 12.292746162003066,
+      "pid": 19337,
+      "pool_acquire_attempts": 1814,
+      "pool_size": 20,
+      "pool_timeouts": 0,
+      "pool_wait_total_ms": 22299.041537873563
+    }
+  }
+]

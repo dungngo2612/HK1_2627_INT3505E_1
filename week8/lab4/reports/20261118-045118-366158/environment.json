@@ -1,0 +1,34 @@
+{
+  "started_at": "2026-11-18T04:51:18.366158+07:00",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:22) [Clang 22.1.3 ]",
+  "logical_cpus": 12,
+  "versions": {
+    "locust": "2.47.0",
+    "Flask": "3.1.3",
+    "SQLAlchemy": "2.0.57",
+    "gunicorn": "25.3.0"
+  },
+  "starter": {
+    "repository": "https://github.com/TrinhLK/lab08-starter",
+    "commit": "b97f793ebf47b6c8a723324bb888f510c64f71ed",
+    "files": {
+      "app.py": "1f9e0ae8f6ebd1d364338dd861f48a566a82892f77a7d2500475075897708618",
+      "models.py": "e909941f3744a1ced38e4428c0ff461c872c7ad6690c4fe9818f4083baadb3d8"
+    },
+    "note": "app.py and models.py are unchanged copies; Lab 4 additions are in benchmark_app.py, locustfile.py and run_load_test.py."
+  },
+  "task_weights": {
+    "list": 3,
+    "read": 2,
+    "create": 1,
+    "search_by_year": 1
+  },
+  "wait_time_seconds": [
+    1,
+    3
+  ],
+  "request_timeout_seconds": 5,
+  "ci_mode": false,
+  "summary_source": "Final Locust HTML; periodic *_stats.csv can omit the last requests"
+}

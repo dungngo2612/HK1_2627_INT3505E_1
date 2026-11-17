@@ -1,0 +1,47 @@
+[
+  {
+    "scenario": "A",
+    "users": 10,
+    "spawn_rate": 2,
+    "seconds": 30,
+    "requests": 143,
+    "failures": 0,
+    "failure_rate_percent": 0.0,
+    "p50_ms": 6,
+    "p95_ms": 12,
+    "p99_ms": 30,
+    "max_ms": 40.0,
+    "rps": 4.846,
+    "slo_pass": true
+  },
+  {
+    "scenario": "B",
+    "users": 50,
+    "spawn_rate": 5,
+    "seconds": 60,
+    "requests": 1382,
+    "failures": 0,
+    "failure_rate_percent": 0.0,
+    "p50_ms": 6,
+    "p95_ms": 14,
+    "p99_ms": 32,
+    "max_ms": 108.0,
+    "rps": 23.291,
+    "slo_pass": true
+  },
+  {
+    "scenario": "C",
+    "users": 200,
+    "spawn_rate": 50,
+    "seconds": 30,
+    "requests": 2903,
+    "failures": 0,
+    "failure_rate_percent": 0.0,
+    "p50_ms": 7,
+    "p95_ms": 69,
+    "p99_ms": 120,
+    "max_ms": 177.0,
+    "rps": 98.296,
+    "slo_pass": true
+  }
+]

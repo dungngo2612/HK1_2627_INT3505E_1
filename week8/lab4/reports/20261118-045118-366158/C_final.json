@@ -1,0 +1,378 @@
+{
+  "duration": "29 seconds",
+  "end_time": "2026-11-17T21:53:28Z",
+  "exceptions_statistics": [],
+  "failures_statistics": [
+    {
+      "error": "CatchResponseError('HTTP 500: INJECTED_FAILURE')",
+      "first_seen": 1794952380.2393851,
+      "last_seen": 1794952408.242211,
+      "method": "GET",
+      "name": "GET /books?year={year}",
+      "occurrences": 6
+    }
+  ],
+  "history": [
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:53:03Z",
+        0.3333333333333333
+      ],
+      "current_rps": [
+        "2026-11-17T21:53:03Z",
+        44.0
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:53:03Z",
+        38
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:53:03Z",
+        110
+      ],
+      "time": "2026-11-17T21:53:03Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:53:03Z",
+        42.54
+      ],
+      "user_count": [
+        "2026-11-17T21:53:03Z",
+        200
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:53:08Z",
+        0.125
+      ],
+      "current_rps": [
+        "2026-11-17T21:53:08Z",
+        81.75
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:53:08Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:53:08Z",
+        94
+      ],
+      "time": "2026-11-17T21:53:08Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:53:08Z",
+        23.27
+      ],
+      "user_count": [
+        "2026-11-17T21:53:08Z",
+        200
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:53:13Z",
+        0.2
+      ],
+      "current_rps": [
+        "2026-11-17T21:53:13Z",
+        99.4
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:53:13Z",
+        5
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:53:13Z",
+        10
+      ],
+      "time": "2026-11-17T21:53:13Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:53:13Z",
+        17.31
+      ],
+      "user_count": [
+        "2026-11-17T21:53:13Z",
+        200
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:53:18Z",
+        0.3
+      ],
+      "current_rps": [
+        "2026-11-17T21:53:18Z",
+        98.9
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:53:18Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:53:18Z",
+        19
+      ],
+      "time": "2026-11-17T21:53:18Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:53:18Z",
+        15.13
+      ],
+      "user_count": [
+        "2026-11-17T21:53:18Z",
+        200
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:53:23Z",
+        0.1
+      ],
+      "current_rps": [
+        "2026-11-17T21:53:23Z",
+        100.2
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:53:23Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:53:23Z",
+        25
+      ],
+      "time": "2026-11-17T21:53:23Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:53:23Z",
+        13.92
+      ],
+      "user_count": [
+        "2026-11-17T21:53:23Z",
+        200
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:53:28Z",
+        0.1
+      ],
+      "current_rps": [
+        "2026-11-17T21:53:28Z",
+        97.3
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:53:28Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:53:28Z",
+        35
+      ],
+      "time": "2026-11-17T21:53:28Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:53:28Z",
+        13.68
+      ],
+      "user_count": [
+        "2026-11-17T21:53:28Z",
+        0
+      ]
+    }
+  ],
+  "host": "http://127.0.0.1:63893",
+  "is_report": true,
+  "locustfile": "locustfile.py",
+  "percentiles_to_chart": [
+    0.5,
+    0.95
+  ],
+  "profile": null,
+  "requests_statistics": [
+    {
+      "avg_content_length": 1819.6647864625302,
+      "avg_response_time": 12.742691132126772,
+      "current_fail_per_sec": 0.0,
+      "current_rps": 42.1,
+      "max_response_time": 135.0,
+      "median_response_time": 5,
+      "method": "GET",
+      "min_response_time": 3.0,
+      "name": "GET /books",
+      "num_failures": 0,
+      "num_requests": 1241,
+      "response_time_percentile_0.95": 66,
+      "response_time_percentile_0.99": 100,
+      "total_fail_per_sec": 0.0,
+      "total_rps": 41.9143943316612
+    },
+    {
+      "avg_content_length": 89.7948402948403,
+      "avg_response_time": 13.13240667430909,
+      "current_fail_per_sec": 0.0,
+      "current_rps": 26.9,
+      "max_response_time": 135.0,
+      "median_response_time": 5,
+      "method": "GET",
+      "min_response_time": 3.0,
+      "name": "GET /books/{id}",
+      "num_failures": 0,
+      "num_requests": 814,
+      "response_time_percentile_0.95": 70,
+      "response_time_percentile_0.99": 110,
+      "total_fail_per_sec": 0.0,
+      "total_rps": 27.492600311017096
+    },
+    {
+      "avg_content_length": 1791.573200992556,
+      "avg_response_time": 14.520535945257393,
+      "current_fail_per_sec": 0.1,
+      "current_rps": 14.3,
+      "max_response_time": 160.0,
+      "median_response_time": 6,
+      "method": "GET",
+      "min_response_time": 3.0,
+      "name": "GET /books?year={year}",
+      "num_failures": 6,
+      "num_requests": 403,
+      "response_time_percentile_0.95": 78,
+      "response_time_percentile_0.99": 120,
+      "total_fail_per_sec": 0.20264815954066653,
+      "total_rps": 13.611201382481436
+    },
+    {
+      "avg_content_length": 104.0,
+      "avg_response_time": 16.81760909051424,
+      "current_fail_per_sec": 0.0,
+      "current_rps": 14.0,
+      "max_response_time": 129.0,
+      "median_response_time": 8,
+      "method": "POST",
+      "min_response_time": 6.0,
+      "name": "POST /books",
+      "num_failures": 0,
+      "num_requests": 408,
+      "response_time_percentile_0.95": 74,
+      "response_time_percentile_0.99": 110,
+      "total_fail_per_sec": 0.0,
+      "total_rps": 13.780074848765326
+    },
+    {
+      "avg_content_length": 1080.1580600139566,
+      "avg_response_time": 13.683467977224515,
+      "current_fail_per_sec": 0.1,
+      "current_rps": 97.3,
+      "max_response_time": 160.0,
+      "median_response_time": 6,
+      "method": "",
+      "min_response_time": 3.0,
+      "name": "Aggregated",
+      "num_failures": 6,
+      "num_requests": 2866,
+      "response_time_percentile_0.95": 70,
+      "response_time_percentile_0.99": 110,
+      "total_fail_per_sec": 0.20264815954066653,
+      "total_rps": 96.79827087392505
+    }
+  ],
+  "response_time_statistics": [
+    {
+      "0.5": 5,
+      "0.6": 6,
+      "0.7": 7,
+      "0.8": 10,
+      "0.9": 28,
+      "0.95": 66,
+      "0.99": 100,
+      "1.0": 130,
+      "method": "GET",
+      "name": "GET /books"
+    },
+    {
+      "0.5": 5,
+      "0.6": 6,
+      "0.7": 7,
+      "0.8": 11,
+      "0.9": 35,
+      "0.95": 70,
+      "0.99": 110,
+      "1.0": 140,
+      "method": "GET",
+      "name": "GET /books/{id}"
+    },
+    {
+      "0.5": 6,
+      "0.6": 6,
+      "0.7": 8,
+      "0.8": 11,
+      "0.9": 32,
+      "0.95": 78,
+      "0.99": 120,
+      "1.0": 160,
+      "method": "GET",
+      "name": "GET /books?year={year}"
+    },
+    {
+      "0.5": 8,
+      "0.6": 9,
+      "0.7": 11,
+      "0.8": 16,
+      "0.9": 46,
+      "0.95": 74,
+      "0.99": 110,
+      "1.0": 130,
+      "method": "POST",
+      "name": "POST /books"
+    },
+    {
+      "0.5": 6,
+      "0.6": 7,
+      "0.7": 8,
+      "0.8": 12,
+      "0.9": 34,
+      "0.95": 70,
+      "0.99": 110,
+      "1.0": 160,
+      "method": "",
+      "name": "Aggregated"
+    }
+  ],
+  "show_download_link": false,
+  "start_time": "2026-11-17T21:52:58Z",
+  "tasks": {
+    "per_class": {
+      "BooksUser": {
+        "ratio": 1.0,
+        "tasks": {
+          "create_book": {
+            "ratio": 0.14285714285714285
+          },
+          "list_books": {
+            "ratio": 0.42857142857142855
+          },
+          "read_book": {
+            "ratio": 0.2857142857142857
+          },
+          "search_by_year": {
+            "ratio": 0.14285714285714285
+          }
+        }
+      }
+    },
+    "total": {
+      "BooksUser": {
+        "ratio": 1.0,
+        "tasks": {
+          "create_book": {
+            "ratio": 0.14285714285714285
+          },
+          "list_books": {
+            "ratio": 0.42857142857142855
+          },
+          "read_book": {
+            "ratio": 0.2857142857142857
+          },
+          "search_by_year": {
+            "ratio": 0.14285714285714285
+          }
+        }
+      }
+    }
+  }
+}

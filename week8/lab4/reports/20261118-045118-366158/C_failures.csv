@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+GET,GET /books?year={year},CatchResponseError('HTTP 500: INJECTED_FAILURE'),5,2026-11-17T21:53:00Z,2026-11-17T21:53:23Z

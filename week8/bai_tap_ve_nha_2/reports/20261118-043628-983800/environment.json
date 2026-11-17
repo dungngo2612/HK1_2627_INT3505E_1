@@ -1,0 +1,47 @@
+{
+  "measured_at": "2026-11-18T04:36:28.983800+07:00",
+  "host": "http://127.0.0.1:57504",
+  "endpoint": "GET /api/v1/products?page=1..50&size=20",
+  "python": "3.12.14 (main, Aug 25 2026, 13:50:22) [Clang 22.1.3 ]",
+  "platform": "macOS-26.5.2-x86_64-i386-64bit",
+  "machine": "x86_64",
+  "logical_cpus": 12,
+  "sqlite": "3.53.1",
+  "versions": {
+    "locust": "2.47.0",
+    "Flask": "3.1.3",
+    "gunicorn": "25.3.0",
+    "SQLAlchemy": "2.0.57",
+    "Flask-SQLAlchemy": "3.1.1"
+  },
+  "database": "Isolated SQLite file; 1000 active products; seeded through real migrations",
+  "server_command": [
+    "/Users/dung.ngo/PycharmProjects/PythonProject2/week8/.venv/bin/python",
+    "-m",
+    "gunicorn",
+    "product_api:create_app()",
+    "--bind",
+    "fd://3",
+    "--workers",
+    "2",
+    "--worker-class",
+    "sync",
+    "--log-level",
+    "warning"
+  ],
+  "wait_time_seconds": [
+    1,
+    3
+  ],
+  "request_timeout_seconds": 5,
+  "warmup_seconds": 10,
+  "minimum_requests": 100,
+  "slo": "p95 < 300 ms AND failure rate < 1%",
+  "limitations": [
+    "API and load generator share the same machine",
+    "Short runs including ramp-up; one run per scenario",
+    "Local SQLite, without reverse proxy, TLS, authentication or internet latency",
+    "Locust percentiles use rounded response-time histogram buckets"
+  ],
+  "summary_source": "Final Locust HTML; periodic *_stats.csv can omit the last requests"
+}

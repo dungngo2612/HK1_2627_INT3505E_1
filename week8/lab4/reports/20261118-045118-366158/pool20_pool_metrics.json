@@ -1,0 +1,14 @@
+{
+  "active_connections": 0,
+  "checkouts": 1814,
+  "hold_ms": 100.0,
+  "injected_500": 0,
+  "max_active_connections": 20,
+  "max_pool_wait_ms": 285.62859399971785,
+  "mean_pool_wait_ms": 12.292746162003066,
+  "pid": 19337,
+  "pool_acquire_attempts": 1814,
+  "pool_size": 20,
+  "pool_timeouts": 0,
+  "pool_wait_total_ms": 22299.041537873563
+}

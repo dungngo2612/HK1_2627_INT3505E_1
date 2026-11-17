@@ -1,0 +1,4 @@
+scenario,users,spawn_rate,seconds,requests,failures,failure_rate_percent,p50_ms,p95_ms,p99_ms,max_ms,rps,slo_pass
+A,10,2,30,143,0,0.0,6,12,30,40.0,4.846,True
+B,50,5,60,1382,0,0.0,6,14,32,108.0,23.291,True
+C,200,50,30,2903,0,0.0,7,69,120,177.0,98.296,True

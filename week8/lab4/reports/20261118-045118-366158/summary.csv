@@ -1,0 +1,6 @@
+scenario,users,spawn_rate,seconds,requests,failures,failure_rate_percent,rps,p50_ms,p95_ms,p99_ms,latency_slo_pass,gate_pass
+A,10,2,30,145,0,0.0,4.931,5.0,17.0,50.0,True,True
+B,50,5,60,1394,3,0.2152,23.477,5.0,18.0,53.0,True,True
+C,200,50,30,2866,6,0.2094,96.798,6.0,70.0,110.0,True,True
+pool5,200,50,20,1130,143,12.6549,53.033,1700.0,2000.0,2000.0,False,False
+pool20,200,50,20,1804,2,0.1109,90.993,110.0,300.0,390.0,False,False

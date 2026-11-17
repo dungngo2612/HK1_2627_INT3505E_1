@@ -1,0 +1,25 @@
+[2026-11-18 04:58:12,691] MacBook-Pro-6/INFO/locust.main: Starting Locust 2.47.0
+[2026-11-18 04:58:12,693] MacBook-Pro-6/INFO/locust.main: Run time limit set to 30 seconds
+[2026-11-18 04:58:12,694] MacBook-Pro-6/INFO/locust.runners: Ramping to 10 users at a rate of 2.00 per second
+[2026-11-18 04:58:16,742] MacBook-Pro-6/INFO/locust.runners: All users spawned: {"BooksUser": 10} (10 total users)
+[2026-11-18 04:58:42,187] MacBook-Pro-6/INFO/locust.main: --run-time limit reached, shutting down
+[2026-11-18 04:58:42,342] MacBook-Pro-6/INFO/locust.main: Shutting down (exit code 0)
+Type     Name                                                                          # reqs      # fails |    Avg     Min     Max    Med |   req/s  failures/s
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+GET      GET /books                                                                        61     0(0.00%) |      6       3      39      5 |    2.09        0.00
+GET      GET /books/{id}                                                                   35     0(0.00%) |      5       3      52      4 |    1.20        0.00
+GET      GET /books?year={year}                                                            19     0(0.00%) |      5       4       9      5 |    0.65        0.00
+POST     POST /books                                                                       24     0(0.00%) |      7       6      10      8 |    0.82        0.00
+--------|----------------------------------------------------------------------------|-------|-------------|-------|-------|-------|-------|--------|-----------
+         Aggregated                                                                       139     0(0.00%) |      6       3      52      5 |    4.76        0.00
+
+Response time percentiles (approximated)
+Type     Name                                                                                  50%    66%    75%    80%    90%    95%    98%    99%  99.9% 99.99%   100% # reqs
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+GET      GET /books                                                                              5      5      6      7      8     14     27     40     40     40     40     61
+GET      GET /books/{id}                                                                         4      4      5      6      7      9     52     52     52     52     52     35
+GET      GET /books?year={year}                                                                  5      5      6      6      9      9      9      9      9      9      9     19
+POST     POST /books                                                                             8      8      9      9      9      9     11     11     11     11     11     24
+--------|--------------------------------------------------------------------------------|--------|------|------|------|------|------|------|------|------|------|------|------
+         Aggregated                                                                              5      6      7      7      9     12     27     40     52     52     52    139
+

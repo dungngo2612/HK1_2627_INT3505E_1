@@ -1,0 +1,28 @@
+{
+  "started_at": "2026-11-18T04:36:32.235119+07:00",
+  "command": [
+    "/Users/dung.ngo/PycharmProjects/PythonProject2/week8/.venv/bin/python",
+    "-m",
+    "locust",
+    "-f",
+    "/Users/dung.ngo/PycharmProjects/PythonProject2/week8/bai_tap_ve_nha_2/locustfile.py",
+    "--host",
+    "http://127.0.0.1:57504",
+    "--headless",
+    "--users",
+    "10",
+    "--spawn-rate",
+    "5",
+    "--run-time",
+    "10s",
+    "--stop-timeout",
+    "5",
+    "--html",
+    "/Users/dung.ngo/PycharmProjects/PythonProject2/week8/bai_tap_ve_nha_2/reports/20261118-043628-983800/warmup/warmup.html",
+    "--csv",
+    "/Users/dung.ngo/PycharmProjects/PythonProject2/week8/bai_tap_ve_nha_2/reports/20261118-043628-983800/warmup/warmup",
+    "--csv-full-history",
+    "--only-summary"
+  ],
+  "exit_code": 0
+}

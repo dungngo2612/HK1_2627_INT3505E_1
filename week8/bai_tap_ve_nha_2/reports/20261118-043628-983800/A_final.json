@@ -1,0 +1,264 @@
+{
+  "duration": "29 seconds",
+  "end_time": "2026-11-17T21:37:13Z",
+  "exceptions_statistics": [],
+  "failures_statistics": [],
+  "history": [
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:36:48Z",
+        0
+      ],
+      "current_rps": [
+        "2026-11-17T21:36:48Z",
+        2.6666666666666665
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:36:48Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:36:48Z",
+        8
+      ],
+      "time": "2026-11-17T21:36:48Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:36:48Z",
+        6.45
+      ],
+      "user_count": [
+        "2026-11-17T21:36:48Z",
+        10
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:36:53Z",
+        0
+      ],
+      "current_rps": [
+        "2026-11-17T21:36:53Z",
+        4.125
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:36:53Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:36:53Z",
+        24
+      ],
+      "time": "2026-11-17T21:36:53Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:36:53Z",
+        9.62
+      ],
+      "user_count": [
+        "2026-11-17T21:36:53Z",
+        10
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:36:58Z",
+        0
+      ],
+      "current_rps": [
+        "2026-11-17T21:36:58Z",
+        4.8
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:36:58Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:36:58Z",
+        24
+      ],
+      "time": "2026-11-17T21:36:58Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:36:58Z",
+        8.35
+      ],
+      "user_count": [
+        "2026-11-17T21:36:58Z",
+        10
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:37:03Z",
+        0
+      ],
+      "current_rps": [
+        "2026-11-17T21:37:03Z",
+        4.7
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:37:03Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:37:03Z",
+        7
+      ],
+      "time": "2026-11-17T21:37:03Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:37:03Z",
+        7.73
+      ],
+      "user_count": [
+        "2026-11-17T21:37:03Z",
+        10
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:37:08Z",
+        0
+      ],
+      "current_rps": [
+        "2026-11-17T21:37:08Z",
+        5.1
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:37:08Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:37:08Z",
+        8
+      ],
+      "time": "2026-11-17T21:37:08Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:37:08Z",
+        7.5
+      ],
+      "user_count": [
+        "2026-11-17T21:37:08Z",
+        10
+      ]
+    },
+    {
+      "current_fail_per_sec": [
+        "2026-11-17T21:37:13Z",
+        0
+      ],
+      "current_rps": [
+        "2026-11-17T21:37:13Z",
+        5.2
+      ],
+      "response_time_percentile_0.5": [
+        "2026-11-17T21:37:13Z",
+        6
+      ],
+      "response_time_percentile_0.95": [
+        "2026-11-17T21:37:13Z",
+        9
+      ],
+      "time": "2026-11-17T21:37:13Z",
+      "total_avg_response_time": [
+        "2026-11-17T21:37:13Z",
+        7.34
+      ],
+      "user_count": [
+        "2026-11-17T21:37:13Z",
+        0
+      ]
+    }
+  ],
+  "host": "http://127.0.0.1:57504",
+  "is_report": true,
+  "locustfile": "locustfile.py",
+  "percentiles_to_chart": [
+    0.5,
+    0.95
+  ],
+  "profile": null,
+  "requests_statistics": [
+    {
+      "avg_content_length": 6842.93006993007,
+      "avg_response_time": 7.33855306998203,
+      "current_fail_per_sec": 0.0,
+      "current_rps": 5.2,
+      "max_response_time": 40.0,
+      "median_response_time": 6,
+      "method": "GET",
+      "min_response_time": 5.0,
+      "name": "/api/v1/products",
+      "num_failures": 0,
+      "num_requests": 143,
+      "response_time_percentile_0.95": 12,
+      "response_time_percentile_0.99": 30,
+      "total_fail_per_sec": 0.0,
+      "total_rps": 4.845531898550427
+    },
+    {
+      "avg_content_length": 6842.93006993007,
+      "avg_response_time": 7.33855306998203,
+      "current_fail_per_sec": 0.0,
+      "current_rps": 5.2,
+      "max_response_time": 40.0,
+      "median_response_time": 6,
+      "method": "",
+      "min_response_time": 5.0,
+      "name": "Aggregated",
+      "num_failures": 0,
+      "num_requests": 143,
+      "response_time_percentile_0.95": 12,
+      "response_time_percentile_0.99": 30,
+      "total_fail_per_sec": 0.0,
+      "total_rps": 4.845531898550427
+    }
+  ],
+  "response_time_statistics": [
+    {
+      "0.5": 6,
+      "0.6": 6,
+      "0.7": 7,
+      "0.8": 7,
+      "0.9": 10,
+      "0.95": 12,
+      "0.99": 30,
+      "1.0": 40,
+      "method": "GET",
+      "name": "/api/v1/products"
+    },
+    {
+      "0.5": 6,
+      "0.6": 6,
+      "0.7": 7,
+      "0.8": 7,
+      "0.9": 10,
+      "0.95": 12,
+      "0.99": 30,
+      "1.0": 40,
+      "method": "",
+      "name": "Aggregated"
+    }
+  ],
+  "show_download_link": false,
+  "start_time": "2026-11-17T21:36:43Z",
+  "tasks": {
+    "per_class": {
+      "ProductBrowser": {
+        "ratio": 1.0,
+        "tasks": {
+          "list_products": {
+            "ratio": 1.0
+          }
+        }
+      }
+    },
+    "total": {
+      "ProductBrowser": {
+        "ratio": 1.0,
+        "tasks": {
+          "list_products": {
+            "ratio": 1.0
+          }
+        }
+      }
+    }
+  }
+}

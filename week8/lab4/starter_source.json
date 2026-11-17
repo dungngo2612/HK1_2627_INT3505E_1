@@ -1,0 +1,9 @@
+{
+  "repository": "https://github.com/TrinhLK/lab08-starter",
+  "commit": "b97f793ebf47b6c8a723324bb888f510c64f71ed",
+  "files": {
+    "app.py": "1f9e0ae8f6ebd1d364338dd861f48a566a82892f77a7d2500475075897708618",
+    "models.py": "e909941f3744a1ced38e4428c0ff461c872c7ad6690c4fe9818f4083baadb3d8"
+  },
+  "note": "app.py and models.py are unchanged copies; Lab 4 additions are in benchmark_app.py, locustfile.py and run_load_test.py."
+}

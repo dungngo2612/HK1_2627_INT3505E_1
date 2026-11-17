@@ -1,0 +1,2 @@
+Method,Name,Error,Occurrences,First Seen,Last Seen
+GET,GET /books?year={year},CatchResponseError('HTTP 0: invalid_json'),2,2026-11-17T21:54:14Z,2026-11-17T21:54:16Z
